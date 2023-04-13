@@ -1,0 +1,30 @@
+---
+# tasks file for redis
+- name: "Install lsb-release"
+  apt:
+    name: lsb-release
+    state: present
+
+- name: redis |no apt key
+  ansible.builtin.apt_key:
+    url: https://packages.redis.io/gpg
+    state: present
+
+- name: redis | apt source
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb {{ ansible_distribution_release }} main"
+    filename: /etc/apt/sources.list.d/redis.list
+    state: present
+    update_cache: false
+
+- name: "update repo and install redis"
+  ansible.builtin.apt:
+    name: "redis"
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: "start redis service"
+  ansible.builtin.service:
+    name: redis
+    state: started
+    enabled: true
