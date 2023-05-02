@@ -5,15 +5,10 @@
     name: lsb-release
     state: present
 
-- name: redis |no apt key
-  ansible.builtin.apt_key:
-    url: https://packages.redis.io/gpg
-    state: present
-
-- name: redis | apt source
+- name: apt source
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb {{ ansible_distribution_release }} main"
-    filename: /etc/apt/sources.list.d/redis.list
+    repo: "deb https://packages.redis.io/deb {{ ansible_distribution_release }} main"
+    filename: /etc/apt/sources.list.d/redis
     state: present
     update_cache: false
 
